@@ -1,0 +1,104 @@
+import numpy as np
+import pandas as pd
+from sklearn.datasets import load_boston
+import matplotlib.pyplot as plt
+%matplotlib inline
+import math
+
+boston = load_boston()
+features = pd.DataFrame(boston.data, columns=boston.feature_names)
+target = pd.DataFrame(boston.target,columns=['target'])
+data = pd.concat([features,target],axis=1)
+data.head(10)
+
+
+x = data['RM']
+
+X1 = sorted(np.array(x/x.mean()))
+
+#Extending the X dataset to obtain more samples
+X=X1+[i+1 for i in X1]
+
+#Applying sin to obtain a non-linear dataset
+Y=np.sin(X)
+plt.plot(X,Y)
+
+n = int(0.8 * len(X))
+
+x_train = X[:n]
+y_train = Y[:n]
+
+x_test = X[n:]
+y_test = Y[n:]
+
+w=np.exp([-(1.2-i)**2/(2*0.1) for i in x_train])
+
+#print(w)
+
+#print(x_train[:10])
+
+plt.plot(x_train, y_train,'r.')
+
+plt.plot(x_train,w,'b.')
+
+def h(x,a,b):
+    return a*x + b
+
+    #cost function
+
+    def error(a,x,b,y,w):
+        e = 0
+        m = len(x)
+
+        # Apply the weights multiplication for the cost function
+
+
+        for i in range(m):
+            e += np.power(h(x[i],a,b)-y[i],2)*w[i]
+
+        return (1/(2*m)) * e
+
+
+        #Calculating Gradient
+
+def step_gradient(a,x,b,y,learning_rate,w):
+    grad_a = 0
+    grad_b = 0
+    m = len(x)
+    for i in range(m):
+        grad_a += (2/m)*((h(x[i],a,b)-y[i])*x[i])*w[i]
+        grad_b += (2/m)*(h(x[i],a,b)-y[i])*w[i]
+    a = a - (grad_a * learning_rate)
+    b = b - (grad_b * learning_rate)
+
+    return a,b
+
+
+    #Gradient Descent
+def descend(initial_a, initial_b, x, y, learning_rate, iterations,w):
+    a = initial_a
+    b = initial_b
+    for i in range(iterations):
+        e = error(a,x,b,y,w)
+        if i%1000 == 0:
+            print(f"Error: {e}-- a:{a}, b:{b}")
+
+        a, b = step_gradient(a,x,b,y, learning_rate,w)
+
+    return a,b
+
+    a = 1.8600662368042573
+    b = -0.7962243178421666
+    learning_rate = 0.01
+    iterations = 10000
+    #Assign a Prediction Point 'P' for which we like to get the hypothesis
+    #p=1.0
+
+    final_a, final_b = descend(a,b,x_train,y_train, learning_rate, iterations,w)
+
+
+    #Calculate the final hypothesis
+H=[i*final_a+final_b for i in x_train]
+
+# Plot the Training Set and Final Hypothesis
+plt.plot(x_train, y_train,'r.',x_train, H,'b')
