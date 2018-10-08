@@ -1,0 +1,48 @@
+from math import sqrt
+import numpy as np
+import matplotlib.pyplot as plt
+import warnings
+from matplotlib import style
+from collections import Counter
+
+def k_nearest_neighbour(data,predict,k):
+
+    distances=[]
+    for group in data:
+        for features in data[group]:
+            euclidean_distance=np.linalg.norm(np.array(features)-np.array(predict))
+            distances.append([euclidean_distance,group])
+
+    votes=[i[1] for i in sorted(distances)[:k]]
+
+    vote_result=Counter(votes).most_common(1)[0][0]
+
+    return vote_result
+
+
+    dataset={'m':[[1,2],[2,3],[3,1]],'b':[[6,5],[7,8],[8,6]]}
+
+test_sample=[5,7]
+
+
+for group in dataset:
+
+    for features in dataset[group]:
+        plt.scatter(features[0],features[1],s=100,color=group)
+
+    plt.scatter(test_sample[0],test_sample[1],s=100)
+
+## Oneline
+
+#[[plt.scatter(features[0],features[1],s=100,color=group)for features in dataset[group]]for group in dataset]
+
+result =k_nearest_neighbour(dataset,test_sample,k=3)
+
+print("Class Test Sample belongs to:")
+print(result)
+
+print("Result of KNN ----------------------------")
+
+[[plt.scatter(features[0],features[1],s=100,color=group)for features in dataset[group]]for group in dataset]
+
+plt.scatter(test_sample[0],test_sample[1],s=100,color=result)
