@@ -1,0 +1,7 @@
+Sky,AirTemp,Humidity,Wind,Water,Forecast,EnjoySport
+Sunny,worm,Normal,strong,Worm,Same,yes
+Sunny,worm,High,Strong,worm,same,yes
+Cloudy,cold,High,Strong,worm,Change,no
+Sunny,worm,High,Strong,Cool,Change,Yes
+Sunny,worm,Normal,Strong,Worm,Change,Yes
+Sunny,worm,High,Strong,Worm,same,Yes
